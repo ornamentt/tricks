@@ -1,0 +1,46 @@
+# argparse处理命令行输入，并从中提取所需的参数值，可以自动生成帮助信息，验证参数类型和范围，并提供默认值等功能。
+# 通过使用 argparse，你可以将参数定义和解析的逻辑统一放在一个地方，使代码更加清晰和易于维护。你可以轻松添加、修改或删除参数选项，而不需要在代码中进行大量的手动处理
+# argparse 允许你在命令行中指定参数值，而不需要修改脚本代码。这意味着你可以通过命令行选项来动态地配置脚本的行为，而无需编辑和重新运行脚本
+
+
+def arg_parse():
+    # projects description
+    desc = "Pytorch EfficientNet"
+    parser = argparse.ArgumentParser(description=desc)
+    parser.add_argument('--save_dir', type=str, required=True,
+                        help='Directory name to save the model')
+
+    parser.add_argument('--root', type=str, default="/data2/imagenet",
+                        help="The Directory of data path.")
+    parser.add_argument('--gpus', type=str, default="0,1,2,3",
+                        help="Select GPU Numbers | 0,1,2,3 | ")
+    parser.add_argument('--num_workers', type=int, default="32",
+                        help="Select CPU Number workers")
+
+    parser.add_argument('--model', type=str, default='b0',
+                        choices=["b0"],
+                        help='The type of Efficient net.')
+
+    parser.add_argument('--epoch', type=int, default=350, help='The number of epochs')
+    parser.add_argument('--batch_size', type=int, default=1024, help='The size of batch')
+    parser.add_argument('--test', action="store_true", help='Only Test')
+
+    parser.add_argument('--ema_decay', type=float, default=0.9999,
+                        help="Exponential Moving Average Term")
+
+    parser.add_argument('--dropout_rate', type=float, default=0.2)
+    parser.add_argument('--dropconnect_rate', type=float, default=0.2)
+
+    parser.add_argument('--optim', type=str, default='rmsprop', choices=["rmsprop"])
+    parser.add_argument('--lr',    type=float, default=0.016, help="Base learning rate when train batch size is 256.")
+    # Adam Optimizer
+    parser.add_argument('--beta', nargs="*", type=float, default=(0.5, 0.999))
+
+    parser.add_argument('--momentum', type=float, default=0.9)
+    parser.add_argument('--eps',      type=float, default=0.001)
+    parser.add_argument('--decay',    type=float, default=1e-5)
+
+    parser.add_argument('--scheduler', type=str, default='exp', choices=["exp", "cosine", "none"],
+                        help="Learning rate scheduler type")
+
+    return parser.parse_args()
